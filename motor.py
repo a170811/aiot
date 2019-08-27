@@ -1,4 +1,4 @@
-import pigpio
+import RPi.GPIO as GPIO
 import time
 
 MOTOR_L1 = 11
@@ -6,25 +6,29 @@ MOTOR_L2 = 13
 MOTOR_R1 = 16
 MOTOR_R2 = 18
 
-pi = pigpio.pi()
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(MOTOR_L1, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(MOTOR_L2, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(MOTOR_R1, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(MOTOR_R2, GPIO.OUT, initial=GPIO.LOW)
 
 def forword():
-    pi.write(MOTOR_L1, 1)
-    pi.write(MOTOR_L2, 0)
-    pi.write(MOTOR_R1, 1)
-    pi.write(MOTOR_R2, 0)
+    GPIO.output(MOTOR_L1, False)
+    GPIO.output(MOTOR_L2, True)
+    GPIO.output(MOTOR_R1, False)
+    GPIO.output(MOTOR_R2, True)
 
 def backword():
-    pi.write(MOTOR_L1, 0)
-    pi.write(MOTOR_L2, 1)
-    pi.write(MOTOR_R1, 0)
-    pi.write(MOTOR_R2, 1)
+    GPIO.output(MOTOR_L1, True)
+    GPIO.output(MOTOR_L2, False)
+    GPIO.output(MOTOR_R1, True)
+    GPIO.output(MOTOR_R2, False)
 
 def stop():
-    pi.write(MOTOR_L1, 0)
-    pi.write(MOTOR_L2, 0)
-    pi.write(MOTOR_R1, 0)
-    pi.write(MOTOR_R2, 0)
+    GPIO.output(MOTOR_L1, False)
+    GPIO.output(MOTOR_L2, False)
+    GPIO.output(MOTOR_R1, False)
+    GPIO.output(MOTOR_R2, False)
 
 def open():
     forword()
@@ -34,6 +38,5 @@ def open():
     backword()
     time.sleep(2)
 
-if '__main__' == __name__:
-    open()
-
+open()
+GPIO.cleanup()
